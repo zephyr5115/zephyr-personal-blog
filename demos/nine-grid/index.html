@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图片九宫格</title>
+    <style>
+        /* 合并表格边框，让九张图片紧密排列。 */
+        table {
+            border-collapse: collapse;
+            border: 1px solid #555;
+        }
+        td {
+            padding: 0;
+        }
+        /* 从第二列开始加左边框，从第二行开始加上边框。 */
+        td + td {
+            border-left: 6px solid #888;
+        }
+        tr + tr td {
+            border-top: 6px solid #888;
+        }
+        img {
+            display: block; /* 去掉图片下方的文字基线空隙。 */
+            width: min(150px, calc((100vw - 32px) / 3));
+            height: auto; aspect-ratio: 1; object-fit: cover;
+        }
+    </style>
+</head>
+<body>
+    <!-- table 是表格，tr 是一行，td 是一个单元格。 -->
+    <!-- a 是超链接：href 指定打开的文件，target="_blank" 表示在新标签页打开。 -->
+    <!-- img 显示图片：src 指定图片路径，alt 是图片的文字说明。 -->
+    <!-- 图片文件夹应和本 HTML 文件放在同一个目录下。 -->
+    <table aria-label="小动物图片九宫格">
+        <!-- 第一行 -->
+        <tr>
+            <td><a href="九宫格图片/01.png" target="_blank" rel="noopener"><img src="九宫格图片/01.png" alt="左上角的小动物"></a></td>
+            <td><a href="九宫格图片/02.png" target="_blank" rel="noopener"><img src="九宫格图片/02.png" alt="上方中间的小动物"></a></td>
+            <td><a href="九宫格图片/03.png" target="_blank" rel="noopener"><img src="九宫格图片/03.png" alt="右上角的小动物"></a></td>
+        </tr>
+        <!-- 第二行：中间一格使用空白图片。 -->
+        <tr>
+            <td><a href="九宫格图片/04.png" target="_blank" rel="noopener"><img src="九宫格图片/04.png" alt="左边中间的小动物"></a></td>
+            <td><a href="九宫格图片/05.png" target="_blank" rel="noopener"><img src="九宫格图片/05.png" alt="中间的空白图片"></a></td>
+            <td><a href="九宫格图片/06.png" target="_blank" rel="noopener"><img src="九宫格图片/06.png" alt="右边中间的小动物"></a></td>
+        </tr>
+        <!-- 第三行 -->
+        <tr>
+            <td><a href="九宫格图片/07.png" target="_blank" rel="noopener"><img src="九宫格图片/07.png" alt="左下角的小动物"></a></td>
+            <td><a href="九宫格图片/08.png" target="_blank" rel="noopener"><img src="九宫格图片/08.png" alt="下方中间的小动物"></a></td>
+            <td><a href="九宫格图片/09.png" target="_blank" rel="noopener"><img src="九宫格图片/09.png" alt="右下角的小动物"></a></td>
+        </tr>
+    </table>
+</body>
+</html>

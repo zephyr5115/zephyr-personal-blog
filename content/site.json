@@ -1,0 +1,28 @@
+{
+  "name": "Zephyr",
+  "handle": "ZephyrHY",
+  "github": "zephyr5115",
+  "githubUrl": "https://github.com/zephyr5115",
+  "csdn": "https://blog.csdn.net/ZephyrHY?type=blog",
+  "feed": "https://blog.csdn.net/ZephyrHY/rss/list",
+  "library": "https://zhiyu-learning-library.stormyeagle129.chatgpt.site/",
+  "siteUrl": "https://zephyr5115.github.io/zephyr-personal-blog/",
+  "avatar": "assets/avatar.png",
+  "description": "记录代码、思考和好奇心。把热爱，写成自己的世界。",
+  "importedAt": "2026-10-25",
+  "motionVersion": "14.6.0",
+  "music": [
+    {
+      "title": "Quiet Pages",
+      "subtitle": "原创氛围音乐 · 安静翻页",
+      "src": "assets/audio/quiet-pages.wav",
+      "duration": 48
+    },
+    {
+      "title": "After the Code",
+      "subtitle": "原创氛围音乐 · 慢慢向前",
+      "src": "assets/audio/after-the-code.wav",
+      "duration": 48
+    }
+  ]
+}

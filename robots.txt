@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://zephyr5115.github.io/zephyr-personal-blog/sitemap.xml

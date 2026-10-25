@@ -1,0 +1,1 @@
+(function(){try{var saved=localStorage.getItem('zephyr-blog-theme');document.documentElement.dataset.theme=saved==='light'||saved==='dark'?saved:'light';}catch(error){document.documentElement.dataset.theme='light';}}());
