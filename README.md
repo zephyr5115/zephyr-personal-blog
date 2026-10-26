@@ -1,6 +1,8 @@
-# Zephyr · 黑白个人博客
+# Zephyr · 黑白个人宇宙 / 视频参考改版
 
 为 Zephyr 制作的个人博客展示网站。纯 HTML、CSS 和 JavaScript，直接打开即可浏览，也可免费部署到 GitHub Pages。
+
+2026-10-26 改版参考用户指定的视频，在同一作者的 Bilibili 公开版本实际播放并逐段核对画面。新增立体个人名片、Bento 卡片、真实数字动画与可驾驶的小世界，保留黑白主题和现有内容。设计依据与时间点见 [REFERENCES.md](REFERENCES.md)。
 
 ## 本地打开
 
@@ -24,7 +26,11 @@
 
 本地歌曲只在浏览器中通过临时 URL 播放，不会上传。主题、收藏和音量使用浏览器 localStorage 保存，因此不同设备不会自动同步。
 
-首页头像卡片的“小实验”会按需启动 WebGL 三维雕塑，可以拖动、暂停、重置；关闭即暂停，支持系统“减少动态效果”设置。文章支持分类、搜索、收藏、目录、代码复制和专注阅读。
+首页名片可翻转查看个人链接，鼠标移动会改变卡片透视；鼠标停留或键盘操作时暂停漂浮，方便点击。Bento 卡片包含真实文章数、学习库、唱片播放器和北京时间；下方的主题分布来自已经收录的 6 篇文章，可以点击进入对应分类。
+
+首页的小世界使用本地 Three.js r180 和原创几何模型实现真实 WebGL。使用方向键 / WASD 驾驶小车，靠近站点按 Enter 打开文章、学习库、音乐或关于我；可点击地面行驶，拖动调整视角。手机支持屏幕方向按钮，四个快捷入口始终可直接使用。场景按需加载，离开视野暂停连续绘制，离开首页释放显存，并尊重系统“减少动态效果”设置。无 WebGL 时保留预览和可用的导航入口。
+
+关于页保留原有镜面雕塑实验。文章支持分类、搜索、收藏、目录、代码复制和专注阅读。
 
 ## 文件结构和修改方法
 
@@ -34,7 +40,11 @@
 | `content/posts.json` | 文章元数据、原文链接、正文和封面 |
 | `js/templates.js` | 各页面的 HTML 模板 |
 | `js/main.js` | 路由、播放器、收藏、搜索等交互 |
+| `js/experience.js` | 名片透视、翻面、计数及三维场景的加载和释放 |
+| `js/world.js` | 已打包的 Three.js 和原创小世界，直接可运行 |
+| `scripts/world-source.js` | 可编辑的三维世界源码 |
 | `css/style.css` | 黑白主题与响应式布局 |
+| `css/experience.css` | 新版首页、立体名片与三维世界布局 |
 | `assets/` | 本地头像、原创封面、音乐与动画库 |
 | `scripts/build.mjs` | 将内容和模板生成静态 HTML |
 | `scripts/deploy.ps1` | 通过本机 Git Credential Manager 发布 GitHub Pages |
@@ -46,6 +56,13 @@ node scripts/build.mjs
 ```
 
 不需要执行 npm install。生成的 HTML 已包含首页及阅读内容，JavaScript 提供进一步的导航与交互。其他文章可用 `article.html?id=文章ID` 直接访问。
+
+只有修改 `scripts/world-source.js` 的三维模型或驾驶逻辑时，才需要额外运行以下开发命令。库版本已经固定在 `package.json` 中，普通内容编辑无需此步骤：
+
+```powershell
+npm install
+npm run build:world
+```
 
 新增文章时复制现有记录，填写唯一 `id`、`title`、`url`、`date`、`category`、`tags`、`excerpt`、`cover` 等字段。本站有全文时设置 `fullText: true` 并在 `html` 中放置经过清理的正文；只有摘要时设置 `fullText: false` 和空 `html`。不要直接插入第三方脚本。分类可使用“前端”“Python”“后端”“AI”。
 
@@ -74,10 +91,12 @@ powershell -ExecutionPolicy Bypass -File scripts/deploy.ps1
 
 如果更改仓库名或改用自定义域名，请同步修改 `content/site.json` 的 `siteUrl`，重新构建。网站资源使用相对路径，已验证项目子目录、带文章参数的页面刷新和静态演示页。
 
+网站已有公开仓库后，在新电脑上应先 `git clone https://github.com/zephyr5115/zephyr-personal-blog.git`，再修改、构建、提交和普通推送。不要从新解压的非 Git 文件夹覆盖已有仓库。F:\html\Zephyr黑白博客 的工作副本会保留 Git 连接，方便在 VS Code 更新。
+
 ## 来源与许可
 
-设计参考和依赖详情见 [REFERENCES.md](REFERENCES.md)。Motion 14.6.0 在本地提供，MIT 许可证随附在 `assets/vendor/MOTION-LICENSE.txt`。页面、SVG 封面与音轨由本项目实现。个人文章、头像和提供的九宫格素材仍归相应权利人所有；本站没有把它们声明为公共素材。
+设计参考和依赖详情见 [REFERENCES.md](REFERENCES.md)。Motion 14.6.0 与 Three.js r180 均为本地资源，MIT 许可证分别随附在 `assets/vendor/MOTION-LICENSE.txt` 和 `assets/vendor/THREE-LICENSE.txt`。三维场景、页面、SVG 封面与音轨由本项目实现。个人文章、头像和提供的九宫格素材仍归相应权利人所有；本站没有把它们声明为公共素材。
 
 ## 验证
 
-已用 Edge/Playwright 检查：47 项交互、5 个页面 × 5 个屏幕宽度（320、390、768、1024、1440 像素）、GitHub Pages 项目子路径与页面刷新。音频验证了真实播放状态、进度、切歌、音量和站内持续播放；三维验证了 WebGL 启动及拖动后的图像变化。人工查看了桌面和手机截图。验证记录见交付目录中的 `zephyr-blog-validation.md`。
+已用 Edge/Playwright 检查：21 项新增体验、47 项原有功能，以及 5 个页面 × 5 个屏幕宽度（320、390、768、1024、1440 像素）。新场景验证了小车真实位移、靠近站点后 Enter 跳转、触屏方向按钮、视角拖动、暂停/重置、离屏停止、路由切换释放资源及减少动态效果。原有音频和文章检查通过，并人工查看桌面和手机截图。

@@ -19,15 +19,15 @@
  function updateNav(){document.querySelectorAll('[data-route]').forEach(link=>{const view=link.dataset.route;if(link.closest('nav')){if(view===(state.view==='article'?'articles':state.view))link.setAttribute('aria-current','page');else link.removeAttribute('aria-current');}});}
  function routeURL(view,id,query=''){const url=new URL(routeFiles[view]||'404.html',rootURL);if(view==='article')url.searchParams.set('id',id);if(query)url.searchParams.set('q',query);return url;}
  function navigate(view,id,options={}){
-  const target=routeURL(view,id,options.query||'');
+  const target=routeURL(view,id,options.query||'');if(options.category)target.searchParams.set('category',options.category);
   if(!options.replace){try{history.replaceState({...history.state,scroll:scrollY},'',location.href);}catch(error){}}
   const historyFunction=options.replace?'replaceState':'pushState';
-  try{history[historyFunction]({scroll:0},'',target.href);}catch(error){const local=new URL(location.href);local.hash='view='+encodeURIComponent(view)+(view==='article'?'&id='+encodeURIComponent(id):'')+(options.query?'&q='+encodeURIComponent(options.query):'');history[historyFunction]({scroll:0},'',local.href);}
+  try{history[historyFunction]({scroll:0},'',target.href);}catch(error){const local=new URL(location.href);local.hash='view='+encodeURIComponent(view)+(view==='article'?'&id='+encodeURIComponent(id):'')+(options.query?'&q='+encodeURIComponent(options.query):'')+(options.category?'&category='+encodeURIComponent(options.category):'');history[historyFunction]({scroll:0},'',local.href);}
   render(parseRoute(),true);window.scrollTo({top:0,behavior:'instant'});
  }
  function render(route,focus=false){
   if(revealObserver)revealObserver.disconnect();if(articleObserver)articleObserver.disconnect();
-  Object.assign(state,route);document.body.classList.remove('focus-reading');
+  Object.assign(state,route);document.body.classList.remove('focus-reading');document.body.dataset.view=state.view;
   const renderer=T[state.view]||T.notFound;
   app.innerHTML=state.view==='article'?T.article(ctx,state.id):renderer(ctx);
   document.getElementById('footer-root').innerHTML=T.footer(ctx);
@@ -35,7 +35,7 @@
   const title=state.view==='article'?(current?current.title:'文章未找到'):({home:'首页',articles:'文章',library:'学习库',about:'关于我'}[state.view]||'页面未找到');
   document.title=title+' · Zephyr 的个人博客';
   updateNav();updateBookmarks();bindPage();updatePlayerUI();updateClock();startReveal();updateProgress();
-  if(focus)app.focus({preventScroll:true});
+  document.dispatchEvent(new CustomEvent('zephyr:page',{detail:{view:state.view}}));if(focus)app.focus({preventScroll:true});
  }
  function bindPage(){
   const search=document.querySelector('[data-article-search]');
@@ -107,7 +107,7 @@
  async function copy(text){try{await navigator.clipboard.writeText(text);return true;}catch(error){const area=document.createElement('textarea');area.value=text;area.style.cssText='position:fixed;left:-9999px;top:0';document.body.append(area);area.select();let success=false;try{success=document.execCommand('copy');}catch(error){}area.remove();return success;}}
  document.addEventListener('click',async event=>{
   const target=event.target instanceof Element?event.target:null;if(!target)return;
-  const routeLink=target.closest('a[data-route]');if(routeLink&&!event.ctrlKey&&!event.metaKey&&!event.shiftKey&&event.button===0){event.preventDefault();const linkURL=new URL(routeLink.href);navigate(routeLink.dataset.route,linkURL.searchParams.get('id')||P[0].id);return;}
+  const routeLink=target.closest('a[data-route]');if(routeLink&&!event.ctrlKey&&!event.metaKey&&!event.shiftKey&&event.button===0){event.preventDefault();const linkURL=new URL(routeLink.href);navigate(routeLink.dataset.route,linkURL.searchParams.get('id')||P[0].id,{query:linkURL.searchParams.get('q')||'',category:linkURL.searchParams.get('category')||''});return;}
   const toc=target.closest('[data-toc-link]');if(toc){event.preventDefault();let id=toc.getAttribute('href').slice(1);try{id=decodeURIComponent(id);}catch(error){}const heading=document.getElementById(id);if(heading)heading.scrollIntoView({behavior:reduced.matches?'instant':'smooth'});return;}
   const bookmark=target.closest('[data-bookmark]');if(bookmark){toggleBookmark(bookmark.dataset.bookmark);return;}
   if(target.closest('[data-theme-toggle]')){toggleTheme(event);return;}
