@@ -16,8 +16,8 @@ function shell(content,title,view){return `<!DOCTYPE html>
  <meta name="description" content="${E(config.description)}"><meta name="theme-color" content="#fafaf8">
  <meta property="og:title" content="${E(title)} · Zephyr"><meta property="og:description" content="${E(config.description)}"><meta property="og:type" content="website">
  <title>${E(title)} · Zephyr 的个人博客</title><link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
- <script src="js/theme.js?v=20261026-2"></script><link rel="stylesheet" href="css/style.css?v=20261026-2"><link rel="stylesheet" href="css/experience.css?v=20261026-2">
- <script src="assets/vendor/motion.js" defer></script><script src="js/data.js?v=20261026-2" defer></script><script src="js/templates.js?v=20261026-2" defer></script><script src="js/main.js?v=20261026-2" defer></script><script src="js/experience.js?v=20261026-2" defer></script>
+ <script src="js/theme.js?v=20261028-1"></script><link rel="stylesheet" href="css/style.css?v=20261028-1"><link rel="stylesheet" href="css/experience.css?v=20261028-1">
+ <script src="assets/vendor/motion.js" defer></script><script src="js/data.js?v=20261028-1" defer></script><script src="js/templates.js?v=20261028-1" defer></script><script src="js/main.js?v=20261028-1" defer></script><script src="js/experience.js?v=20261028-1" defer></script>
 </head>
 <body data-initial-view="${view}">
  <a class="skip-link" href="#app">跳到主要内容</a>

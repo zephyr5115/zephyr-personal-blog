@@ -5,7 +5,7 @@
  let cleanup=()=>{},worldScript;
  function loadWorld(){
   if(window.ZephyrWorldEngine)return Promise.resolve();
-  if(!worldScript)worldScript=new Promise((resolve,reject)=>{const script=document.createElement('script');script.src=new URL('js/world.js',root).href;script.onload=resolve;script.onerror=reject;document.head.append(script);});
+  if(!worldScript)worldScript=new Promise((resolve,reject)=>{const script=document.createElement('script');script.src=new URL('js/world.js?v=20261028-1',root).href;script.onload=resolve;script.onerror=()=>{script.remove();worldScript=null;reject(new Error('World unavailable'));};document.head.append(script);});
   return worldScript;
  }
  function bind(){
@@ -25,7 +25,7 @@
   if(stage){
    const open=action=>{if(action==='music'){document.querySelector('.world-destinations [data-open-music]')?.click();return;}document.querySelector('.world-destinations [data-route="'+action+'"]')?.click();};
    let loading=false;
-   const start=async()=>{if(scene||loading||dead)return;loading=true;try{await loadWorld();if(dead||!stage.isConnected)return;scene=window.ZephyrWorldEngine.mount(stage,{reduced:reduced.matches,onOpen:open});scene.setVisible(sceneVisible);window.ZephyrWorld=scene;}catch(error){if(dead)return;stage.classList.add('is-unavailable');stage.querySelector('[data-world-loading]').textContent='小世界暂时休息，下面的入口仍然为你开放。';}finally{loading=false;}};
+   const start=async()=>{if(scene||loading||dead)return;loading=true;try{await loadWorld();if(dead||!stage.isConnected)return;scene=window.ZephyrWorldEngine.mount(stage,{reduced:reduced.matches,onOpen:open});scene.setVisible(sceneVisible);window.ZephyrWorld=scene;}catch(error){if(dead)return;stage.classList.add('is-unavailable');stage.querySelector('[data-world-loading]').textContent='小世界暂时休息，下面的入口仍然为你开放。';stage.querySelectorAll('[data-world-pause],[data-world-reset]').forEach(button=>button.disabled=true);stage.querySelector('.world-canvas').tabIndex=-1;}finally{loading=false;}};
    const observer=new IntersectionObserver(entries=>{sceneVisible=entries[0].isIntersecting;if(sceneVisible)start();scene?.setVisible(sceneVisible);},{rootMargin:'180px 0px',threshold:0});observer.observe(stage);observers.push(observer);
    on(document,'visibilitychange',()=>scene?.setVisible(sceneVisible&&!document.hidden));
    on(reduced,'change',()=>{if(scene){scene.setPaused(reduced.matches);}});

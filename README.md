@@ -18,7 +18,7 @@
 - 根据公开 CSDN RSS 收录 6 篇真实文章的标题、日期、摘要与原文链接。2026-10-25 获取。
 - HTML5 笔记已收录完整正文；其余 5 篇明确标注为摘要，点击按钮在 CSDN 阅读全文。未编造文章正文、个人经历、阅读量或关注数。
 
-文章数据是静态快照，发布后不会自动同步 CSDN。更新方法见下文。
+文章数据是静态快照，发布后不会自动同步 CSDN。可以用下方的手动同步命令检查并添加新文章摘要。
 
 ## 音乐和交互
 
@@ -65,6 +65,18 @@ npm run build:world
 ```
 
 新增文章时复制现有记录，填写唯一 `id`、`title`、`url`、`date`、`category`、`tags`、`excerpt`、`cover` 等字段。本站有全文时设置 `fullText: true` 并在 `html` 中放置经过清理的正文；只有摘要时设置 `fullText: false` 和空 `html`。不要直接插入第三方脚本。分类可使用“前端”“Python”“后端”“AI”。
+
+### 从 CSDN 添加新文章
+
+在 VS Code 的 PowerShell 终端运行以下命令。第一条只预览新文章，确认后再运行第二条写入；第三条重新生成网站。已有文章的正文、分类、标签和封面不会被覆盖。新文章先放在“其他”分类、展示 RSS 摘要并链接 CSDN 原文；可在 `content/posts.json` 中自行调整分类和封面。同步器不删除已有文章，也不会自动上传或发布。
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/sync-csdn.ps1
+powershell -ExecutionPolicy Bypass -File scripts/sync-csdn.ps1 -Apply
+node scripts/build.mjs
+```
+
+检查网页无误后，再在 VS Code 源代码管理中提交并推送，GitHub Pages 才会更新。网络不可用或 RSS 格式异常时脚本会停止，保留原文件。
 
 ## GitHub Pages 部署
 

@@ -26,6 +26,7 @@
   render(parseRoute(),true);window.scrollTo({top:0,behavior:'instant'});
  }
  function render(route,focus=false){
+  clearTimeout(filterTimer);
   if(revealObserver)revealObserver.disconnect();if(articleObserver)articleObserver.disconnect();
   Object.assign(state,route);document.body.classList.remove('focus-reading');document.body.dataset.view=state.view;
   const renderer=T[state.view]||T.notFound;
@@ -49,7 +50,8 @@
  }
  function updateFilterURL(){const url=new URL(location.href);if(location.protocol==='file:'){const hash=new URLSearchParams(url.hash.slice(1));hash.set('view','articles');state.query?hash.set('q',state.query):hash.delete('q');state.category!=='全部'?hash.set('category',state.category):hash.delete('category');url.hash=hash.toString();}else{state.query?url.searchParams.set('q',state.query):url.searchParams.delete('q');state.category!=='全部'?url.searchParams.set('category',state.category):url.searchParams.delete('category');}try{history.replaceState({...history.state},'',url.href);}catch(error){}}
  function filterPosts(animate=true){
-  if(!['全部','前端','Python','后端','AI','已收藏'].includes(state.category))state.category='全部';
+  if(!document.querySelector('[data-post-grid]'))return;
+  if(!['全部','前端','Python','后端','AI','已收藏',...P.map(post=>post.category)].includes(state.category))state.category='全部';
   const keywords=state.query.trim().toLowerCase().split(/\s+/).filter(Boolean);let count=0;const visible=[];
   document.querySelectorAll('[data-post-card]').forEach(card=>{const match=(state.category==='全部'||(state.category==='已收藏'?bookmarks.has(card.dataset.postId):card.dataset.category===state.category))&&keywords.every(word=>card.dataset.search.toLowerCase().includes(word));card.hidden=!match;if(match){count++;visible.push(card);}});
   document.querySelectorAll('button[data-category]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.category===state.category)));
